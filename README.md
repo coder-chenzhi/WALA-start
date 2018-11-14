@@ -1,12 +1,10 @@
-WALA Starter Kit
+WALA and TinyPDG Starter Kit
 =======
 
 ### Introduction
 
-This is a small example project to help in getting started with the
-[WALA](https://github.com/wala/WALA) program analysis framework.  You
-can clone and build this project to get WALA installed, and then
-modify it to suit your own needs.
+This is an example project to slice program using both WALA and TinyPDG.
+[WALA](https://github.com/wala/WALA) interprocedural tool for program analysis framework.  And [TinyODG] (https://github.com/YoshikiHigo/TinyPDG) intraprocedural library for program analysis. Note: we have updated or add some interface and API in WALA and TinyPDG to perform program slicing. You can clone and build this project to get WALA installed, and then modify it to suit your own needs.
 
 ### Requirements
 
@@ -29,13 +27,12 @@ Clone the repository, and then run:
     
 This will pull in the WALA jars and build the sample code.
 
-### Example analyses
-
-  *
-    [Variants of a simple dataflow analysis](https://github.com/msridhar/WALA-start/tree/master/src/main/java/com/ibm/wala/examples/analysis/dataflow), including an [example driver](https://github.com/msridhar/WALA-start/blob/master/src/main/java/com/ibm/wala/examples/drivers/CSReachingDefsDriver.java)
-  * [Simple driver](https://github.com/msridhar/WALA-start/blob/master/src/main/java/com/ibm/wala/examples/drivers/ScopeFileCallGraph.java) for building a [call graph](http://wala.sourceforge.net/wiki/index.php/UserGuide:CallGraph) from a [scope file](http://wala.sourceforge.net/wiki/index.php/UserGuide:AnalysisScope)
+### Example setup
+(1) In the folder dat, setup the analysis scope in the file scope.txt. The example will analyze the source code and compiled class files.
+(2) Import your source code and class file into the dat folder or other specific dir.
+(3) You can use the default exclusions or change by yourself.
+(4) Run the slice main entry: slice/sliceMain.java.
   
-We plan to add more examples soon, like examples of doing Android or JavaScript analysis.
 
 License
 -------
