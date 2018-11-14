@@ -23,7 +23,8 @@ public class intraPSlicer {
 	private static final int SIZE_THRESHOLD = 1; //note: don't setup too large
 
 
-	public void intraSlice(String fileName, int lineNumber){
+	public TreeSet<Integer> intraSlice(String fileName, int lineNumber){
+		TreeSet<Integer> slices = new TreeSet<Integer>();
 		final File target = new File(fileName);
 		if (!target.exists()) {
 			System.err.println("specified directory or file does not exist.");
@@ -60,21 +61,25 @@ public class intraPSlicer {
 		PDGNode<?> enternode;
 		for (final PDG pdg : pdgArray) {
 			final SortedSet<PDGNode<?>> nodes = pdg.getAllNodes();
-			enternode = pdg.getNodeofLine(nodes, 9);
-			System.out.println(enternode.getText());
+			enternode = pdg.getNodeofLine(nodes, lineNumber);
+			if(enternode == null)
+				continue;
+			System.out.println("intraprocedual slicing...\n"+enternode.getText());
 			pdg.getBackwardNodes(enternode, backwardslicenodes);
 			pdg.getForwardNodes(enternode, forwardslicenodes);
 			break;
 		}
 		for(final PDGNode<?> slicenode : backwardslicenodes){
 			final String fromNodeNormalizedText = generateNodeText(slicenode);
-			System.out.println("Source line number = "+fromNodeNormalizedText);
+//			System.out.println("Source line number = "+fromNodeNormalizedText);
+			slices.add(Integer.parseInt(fromNodeNormalizedText));
 		}
 		for(final PDGNode<?> slicenode : forwardslicenodes){
 			final String fromNodeNormalizedText = generateNodeText(slicenode);
-			System.out.println("Source line number = "+fromNodeNormalizedText);
+//			System.out.println("Source line number = "+fromNodeNormalizedText);
+			slices.add(Integer.parseInt(fromNodeNormalizedText));
 		}
-		
+		return slices;
 	}
 	
 	private static List<File> getFiles(final File file) {

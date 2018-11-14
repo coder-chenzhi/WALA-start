@@ -24,5 +24,5 @@ public class Constant {
 	public static final String SOURCECODEFILE = "./dat/walaTest.java";
 	public static final String EXCLUSIONFILE = "./dat/exclusions.txt";
 	
-	public static final int LINENUM = 13;
+	public static final int LINENUM = 17;
 }
