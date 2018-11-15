@@ -71,7 +71,7 @@ public class sliceMain {
 		//6. Find seed statement
 		CGNode cgNode = sUtil.findSliceMethod(cg, methodName);
 //		Statement statement = sUtil.findAllocationStatement(cgNode);
-		Statement statement = sUtil.findSeedStatement(cgNode, Constant.LINENUM); //construct seed statement, improve future
+		Statement statement = sUtil.findSeedGenernalStatement(cgNode, Constant.LINENUM); //construct seed statement, improve future
 		System.out.println(statement);
 		System.out.println("interprocedual slicing...");
 		//7. interprocedural program slicing

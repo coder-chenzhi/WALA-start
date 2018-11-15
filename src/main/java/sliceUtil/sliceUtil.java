@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.TreeSet;
 
 import org.eclipse.jdt.core.dom.ASTNode;
+import com.ibm.wala.ipa.slicer.PDG;
 
 import com.ibm.wala.classLoader.IBytecodeMethod;
 import com.ibm.wala.classLoader.IClass;
@@ -187,12 +189,12 @@ public class sliceUtil {
         return null;
       }
 	/**
-	 * return seed statement based on source code line number
+	 * return seed statement based on source code line number, call ssaInstruction2Statement
 	 * @param n CGNode
-	 * @param methodName
+	 * @param lineNum, source code line number
 	 * @throws InvalidClassFileException 
 	 */
-	public Statement findSeedStatement(CGNode n, int lineNum) throws InvalidClassFileException {
+	public Statement findSeedGenernalStatement(CGNode n, int lineNum) throws InvalidClassFileException {
 		IR ir = n.getIR();
 		IBytecodeMethod<?> method = (IBytecodeMethod<?>) ir.getMethod();
 		for (int i = 0; i < ir.getInstructions().length; i++) {
@@ -200,23 +202,49 @@ public class sliceUtil {
 			int sourceLineNum = method.getLineNumber(bytecodeIndex);
 			if (sourceLineNum == lineNum) {
 				SSAInstruction s = ir.getInstructions()[i];
-				if (s instanceof SSANewInstruction)
+				if(s == null)
+					continue;
+				Map<SSAInstruction,Integer> indicesMap = PDG.computeInstructionIndices(ir);				
+				Statement statement = PDG.ssaInstruction2Statement(n, s, indicesMap, ir);
+				return statement;
+			}
+		}
+		Assertions.UNREACHABLE("failed to find allocation in line number " + lineNum);
+		return null;
+	}
+	/**
+	 * return seed statement (new statement and invoke statement) based on source code line number
+	 * @param n CGNode
+	 * @param lineNum, source code line number
+	 * @throws InvalidClassFileException 
+	 */
+	public Statement findSeedSpecificStatement(CGNode n, int lineNum) throws InvalidClassFileException {
+		IR ir = n.getIR();
+		IBytecodeMethod<?> method = (IBytecodeMethod<?>) ir.getMethod();
+		for (int i = 0; i < ir.getInstructions().length; i++) {
+			int bytecodeIndex = method.getBytecodeIndex(i);
+			int sourceLineNum = method.getLineNumber(bytecodeIndex);
+			if (sourceLineNum == lineNum) {
+				SSAInstruction s = ir.getInstructions()[i];
+				if (s instanceof SSANewInstruction) //new statement
 					return new NormalStatement(n, i);
-				else if (s instanceof SSAAbstractInvokeInstruction) {
+				else if (s instanceof SSAAbstractInvokeInstruction) { //invoke method statement
 					SSAAbstractInvokeInstruction call = (SSAAbstractInvokeInstruction) s;
 					com.ibm.wala.util.intset.IntSet indices = ir.getCallInstructionIndices(call.getCallSite());
 					com.ibm.wala.util.debug.Assertions.productionAssertion(indices.size() == 1,
 							"expected 1 but got " + indices.size());
-					return new com.ibm.wala.ipa.slicer.NormalStatement(n, indices.intIterator().next());
+					return new NormalStatement(n, indices.intIterator().next());
 				}
+				
 			}
 		}
-
 		Assertions.UNREACHABLE("failed to find allocation in " + n);
 		return null;
 	}
 	/**
-	 * output slice statements
+	 * return source code line number of slicing statement
+	 * @param slice, slice statements
+	 * 
 	 */
 
 	public TreeSet<Integer> mapSourcecode(Collection<Statement> slice) {
@@ -243,7 +271,7 @@ public class sliceUtil {
 		}
 		return slices;
 	}
-    
+
 	/**
 	 * function : for statement node
 	 * 
