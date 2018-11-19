@@ -24,5 +24,16 @@ public class Constant {
 	public static final String SOURCECODEFILE = "./dat/walaTest.java";
 	public static final String EXCLUSIONFILE = "./dat/exclusions.txt";
 	
+	public static final String repoPath = "/Users/jinfu/Documents/workspace/Git/hadoop/";
+	public static final String repoUrl = "https://github.com/apache/hadoop.git";
+	public static final String commitId = "248d9b6fff648cdb02581d458556b6f7c090ef1a";
+//	public static final String commitId = "921338cd86e7215b0c4b1efdf2daf9449fb12c7b";
+	
+	//When java execute shell command it will search the command from /bin. 
+	//Hence, if the command is not in path /bin, it will fatal
+	public static final String MVNCMD = "mvn";
+	public static final String ARGS1 = "compile"; //improve here to compile only sub-project to save time
+	public static final String ARGS2 = "-DskipTests";
+	
 	public static final int LINENUM = 8;
 }
