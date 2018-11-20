@@ -1,0 +1,4 @@
+Primordial,Java,stdlib,none
+Primordial,Java,jarFile,primordial.jar.model
+Application,Java,classFile,./dat/walaTest.class
+Application,Java,sourceFile,./dat/walaTest.java
