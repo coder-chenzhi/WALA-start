@@ -23,6 +23,7 @@ public class Constant {
 	public static final String SCOPE = "./dat/scope.txt";
 	public static final String SOURCECODEFILE = "./dat/walaTest.java";
 	public static final String SOURCECLASSFILE= "./dat/walaTest.class";
+	public static final String SOURCEJARFILE= "E:\\Code\\EclipseCommitterWork\\loganalysis\\log-extractor\\target\\log-extractor-0.0.1-SNAPSHOT-shaded.jar";
 	public static final String EXCLUSIONFILE = "./dat/exclusions.txt";
 	public static final String SLICEPARAM = "./dat/hadoop_refactoring.log";
 	
